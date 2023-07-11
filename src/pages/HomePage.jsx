@@ -1,41 +1,72 @@
 import styled from "styled-components"
 import { BiExit } from "react-icons/bi"
 import { AiOutlineMinusCircle, AiOutlinePlusCircle } from "react-icons/ai"
-import { useState, useContext } from "react";
-import { UserContext } from "../contexts/UserContext.jsx"
+import { useState, useContext, useEffect } from "react";
+import { UserContext } from "../contexts/UserContext.jsx";
+import axios from "axios";
+import { Link, useNavigate} from "react-router-dom";
+
+const viteURL = import.meta.env.VITE_API_URL;
 
 export default function HomePage() {
-  const {user, setUser} = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
+  const { user: userObj, token } = user;
+  const [transactions, setTransactions] = useState([]);
+
+  const url = `${viteURL}/home`;
+
+  useEffect(() => {
+    const config = {
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    }
+    const request = axios.get(url, config);
+
+    request.then(r => {
+      setTransactions(r.data);
+    });
+    request.catch(r => {
+      alert(r.response.data);
+    });
+  }, []);
+
+  
+  const soma = 0;
+  /*
+  transactions.forEach(t => (
+    if(t.tipo === "Entrada"){
+      soma+=Number(t.value);
+    } else {
+      soma-=Number(t.value)
+    };
+  ))
+  */
 
   return (
     <HomeContainer>
       <Header>
-        <h1>Olá, Fulano</h1>
+        <h1>Olá, {userObj.name}</h1>
         <BiExit />
       </Header>
 
       <TransactionsContainer>
         <ul>
-          <ListItemContainer>
-            <div>
-              <span>30/11</span>
-              <strong>Almoço mãe</strong>
-            </div>
-            <Value color={"negativo"}>120,00</Value>
-          </ListItemContainer>
-
-          <ListItemContainer>
-            <div>
-              <span>15/11</span>
-              <strong>Salário</strong>
-            </div>
-            <Value color={"positivo"}>3000,00</Value>
-          </ListItemContainer>
+          {transactions.map(t => (
+            <ListItemContainer>
+              <div>
+                <span>t.time</span>
+                <strong>t.description</strong>
+              </div>
+              <Value color={t.tipo==="Entrada" ? "positivo" : "negativo"}>t.value</Value>
+            </ListItemContainer>
+          )
+          )}
         </ul>
 
         <article>
           <strong>Saldo</strong>
-          <Value color={"positivo"}>2880,00</Value>
+          <Value color={soma<0 ? "negativo" : "positivo"}>{soma}</Value>
         </article>
       </TransactionsContainer>
 
@@ -43,12 +74,16 @@ export default function HomePage() {
       <ButtonsContainer>
         <button>
           <AiOutlinePlusCircle />
-          <p>Nova <br /> entrada</p>
+          <Link to="/nova-transacao/entrada">
+            <p>Nova <br /> entrada</p>
+          </Link>
         </button>
         <button>
           <AiOutlineMinusCircle />
-          <p>Nova <br />saída</p>
-        </button>
+          <Link to="/nova-transacao/saida">
+            <p>Nova <br />saída</p>
+          </Link>
+        </button> 
       </ButtonsContainer>
 
     </HomeContainer>

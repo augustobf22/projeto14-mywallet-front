@@ -10,7 +10,7 @@ export default function UserProvider({children}) {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if(user === null){
+        if(lsUser === null){
             navigate("/");
         } else {
             navigate("/home");
