@@ -3,7 +3,7 @@ import { Link, useNavigate} from "react-router-dom"
 import MyWalletLogo from "../components/MyWalletLogo"
 import axios from "axios";
 import { useState, useContext } from "react";
-import UserContext from "../contexts/UserContext.js"
+import { UserContext } from "../contexts/UserContext.js"
 
 const viteURL = import.meta.env.VITE_API_URL;
 
