@@ -12,10 +12,18 @@ export default function HomePage() {
   const { user, setUser } = useContext(UserContext);
   const { user: userObj, token } = user;
   const [transactions, setTransactions] = useState([]);
+  const [transactionOn, setTransactionOn] = useState(false);
+  const [soma, setSoma] = useState(0);
+  const navigate = useNavigate();
 
   const url = `${viteURL}/home`;
 
   useEffect(() => {
+     if(user===undefined){
+      alert("Faça o login!");
+      navigate("/");
+    };
+
     const config = {
       headers: {
         "Authorization": `Bearer ${token}`
@@ -25,40 +33,44 @@ export default function HomePage() {
 
     request.then(r => {
       setTransactions(r.data);
+      if(r.data.length>0) setTransactionOn(true);
+
+      let aux=0;
+      r.data.forEach(t => (t.tipo===":entrada" ? aux+=Number(t.value) : aux-=Number(t.value)));
+      setSoma(aux.toLocaleString("pt-BR", {minimumFractionDigits: 2, maximumFractionDigits: 2}));
     });
+
     request.catch(r => {
       alert(r.response.data);
     });
   }, []);
 
-  
-  const soma = 0;
-  /*
-  transactions.forEach(t => (
-    if(t.tipo === "Entrada"){
-      soma+=Number(t.value);
-    } else {
-      soma-=Number(t.value)
-    };
-  ))
-  */
+  function logout() {
+     localStorage.removeItem("user");
+     alert("Usuário deslogado!");
+     navigate("/");
+  }
 
   return (
     <HomeContainer>
       <Header>
-        <h1>Olá, {userObj.name}</h1>
-        <BiExit />
+        <h1 data-test="user-name">Olá, {userObj !== undefined ? userObj.name : ""}</h1>
+        <BiExit onClick={logout} data-test="logout"/>
       </Header>
 
-      <TransactionsContainer>
+      <Placheholder transactionOn={transactionOn}>
+        Não há registros de entrada ou saída
+      </Placheholder>
+
+      <TransactionsContainer transactionOn={transactionOn}>
         <ul>
           {transactions.map(t => (
-            <ListItemContainer>
+            <ListItemContainer key={t._id}>
               <div>
-                <span>t.time</span>
-                <strong>t.description</strong>
+                <span>{t.time}</span>
+                <strong data-test="registry-name">{t.description}</strong>
               </div>
-              <Value color={t.tipo==="Entrada" ? "positivo" : "negativo"}>t.value</Value>
+              <Value data-test="registry-amount" color={t.tipo===":entrada" ? "positivo" : "negativo"}>{t.value.toLocaleString("pt-BR", {minimumFractionDigits: 2, maximumFractionDigits: 2})}</Value>
             </ListItemContainer>
           )
           )}
@@ -66,7 +78,7 @@ export default function HomePage() {
 
         <article>
           <strong>Saldo</strong>
-          <Value color={soma<0 ? "negativo" : "positivo"}>{soma}</Value>
+          <Value color={soma<0 ? "negativo" : "positivo"} data-test="total-amount" >{soma}</Value>
         </article>
       </TransactionsContainer>
 
@@ -75,13 +87,13 @@ export default function HomePage() {
         <button>
           <AiOutlinePlusCircle />
           <Link to="/nova-transacao/entrada">
-            <p>Nova <br /> entrada</p>
+            <p data-test="new-income">Nova <br /> entrada</p>
           </Link>
         </button>
         <button>
           <AiOutlineMinusCircle />
           <Link to="/nova-transacao/saida">
-            <p>Nova <br />saída</p>
+            <p data-test="new-expense">Nova <br />saída</p>
           </Link>
         </button> 
       </ButtonsContainer>
@@ -110,7 +122,7 @@ const TransactionsContainer = styled.article`
   color: #000;
   border-radius: 5px;
   padding: 16px;
-  display: flex;
+  display: ${props => props.transactionOn ? "flex" : "none"};
   flex-direction: column;
   justify-content: space-between;
   article {
@@ -122,6 +134,24 @@ const TransactionsContainer = styled.article`
     }
   }
 `
+const Placheholder = styled.div`
+    display: ${props => props.transactionOn ? "none" : "flex" };
+    flex-grow: 1;
+    background-color: #fff;
+    color: #868686;
+    border-radius: 5px;
+    padding: 16px;
+    font-family: Raleway;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 23px;
+    letter-spacing: 0em;
+    text-align: center;
+
+    justify-content: center;
+    align-items: center;
+`;
+
 const ButtonsContainer = styled.section`
   margin-top: 15px;
   margin-bottom: 0;

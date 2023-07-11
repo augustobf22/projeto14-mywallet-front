@@ -43,6 +43,7 @@ export default function SignInPage() {
       <form onSubmit={submitForm}>
         <MyWalletLogo />
         <input 
+          data-test="email"
           required
           placeholder="E-mail" 
           type="email" 
@@ -53,6 +54,7 @@ export default function SignInPage() {
           })}
         />
         <input 
+          data-test="password"
           required
           placeholder="Senha" 
           type="password" 
@@ -62,7 +64,7 @@ export default function SignInPage() {
             password:e.target.value
           })}
         />
-        <button type="submit">Entrar</button>
+        <button type="submit" data-test="sign-in-submit">Entrar</button>
       </form>
 
       <Link to="/cadastro">
