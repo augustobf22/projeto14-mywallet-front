@@ -2,7 +2,7 @@ import styled from "styled-components"
 import { BiExit } from "react-icons/bi"
 import { AiOutlineMinusCircle, AiOutlinePlusCircle } from "react-icons/ai"
 import { useState, useContext } from "react";
-import { UserContext } from "../contexts/UserContext.js"
+import { UserContext } from "../contexts/UserContext.jsx"
 
 export default function HomePage() {
   const {user, setUser} = useContext(UserContext);
