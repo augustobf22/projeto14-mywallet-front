@@ -5,7 +5,6 @@ import axios from "axios";
 import { useState } from "react";
 
 const viteURL = import.meta.env.VITE_API_URL;
-console.log("viteurl: ", viteURL);
 
 export default function SignUpPage() {
   const navigate = useNavigate();
@@ -27,15 +26,13 @@ export default function SignUpPage() {
       return;
     };
 
-    console.log("url: ", url);
     const promise = axios.post(url, signUp);
 
     promise.then(r => {
       navigate("/");
     });
     promise.catch(r => {
-      console.log(r);
-      alert(r.response.data.message);
+      alert(r.response.data);
     });
   };
 
