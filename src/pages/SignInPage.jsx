@@ -1,15 +1,63 @@
 import styled from "styled-components"
-import { Link } from "react-router-dom"
+import { Link, useNavigate} from "react-router-dom"
 import MyWalletLogo from "../components/MyWalletLogo"
+import axios from "axios";
+import { useState, useContext } from "react";
+import UserContext from "../contexts/UserContext.js"
+
+const viteURL = import.meta.env.VITE_API_URL;
 
 export default function SignInPage() {
+  const navigate = useNavigate();
+
+  const url = `${viteURL}/`;
+
+  const [login, setLogin] = useState({
+    email: "",
+    password: ""
+  });
+
+  const {user, setUser} = useContext(UserContext);
+
+  function submitForm(event) {
+    event.preventDefault();
+
+    const promise = axios.post(url, login);
+
+    promise.then(r => {
+      console.log(r.data);
+      navigate("/home");
+    });
+    promise.catch(r => {
+      alert(r.response.data);
+    });
+  };
+
   return (
     <SingInContainer>
-      <form>
+      <form onSubmit={submitForm}>
         <MyWalletLogo />
-        <input placeholder="E-mail" type="email" />
-        <input placeholder="Senha" type="password" autocomplete="new-password" />
-        <button>Entrar</button>
+        <input 
+          required
+          placeholder="E-mail" 
+          type="email" 
+          value={login.email}
+          onChange={e => setLogin({
+            email:e.target.value,
+            password: login.password
+          })}
+        />
+        <input 
+          required
+          placeholder="Senha" 
+          type="password" 
+          value={login.password}
+          onChange={e => setLogin({
+            email: login.email,
+            password:e.target.value
+          })}
+        />
+        <button type="submit">Entrar</button>
       </form>
 
       <Link to="/cadastro">
