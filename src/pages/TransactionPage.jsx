@@ -1,5 +1,5 @@
 import styled from "styled-components"
-import { Link, useNavigate, useParams} from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import axios from "axios";
 import { useState, useContext } from "react";
 import { UserContext } from "../contexts/UserContext.jsx"
@@ -13,12 +13,12 @@ export default function TransactionsPage() {
     description: ""
   });
 
-  const tipo = useParams().tipo;
+  const type = useParams().tipo;
 
-  const {user, setUser} = useContext(UserContext);
-  const {token} = user;
+  const { user } = useContext(UserContext);
+  const { token } = user;
 
-  const url = `${viteURL}/nova-transacao/:${tipo}`;
+  const url = `${viteURL}/nova-transacao/:${type}`;
 
   function submitForm(event) {
     event.preventDefault();
@@ -41,12 +41,12 @@ export default function TransactionsPage() {
 
   return (
     <TransactionsContainer>
-      <h1>Nova {tipo}</h1>
+      <h1>Nova {type}</h1>
       <form onSubmit={submitForm}>
-        <input 
+        <input
           data-test="registry-amount-input"
           required
-          placeholder="Valor" 
+          placeholder="Valor"
           type="text"
           value={transaction.value}
           onChange={e => setTransaction({
@@ -54,18 +54,18 @@ export default function TransactionsPage() {
             description: transaction.description
           })}
         />
-        <input 
+        <input
           data-test="registry-name-input"
           required
-          placeholder="Descrição" 
-          type="text" 
+          placeholder="Descrição"
+          type="text"
           value={transaction.description}
           onChange={e => setTransaction({
             value: transaction.value,
             description: e.target.value
           })}
         />
-        <button type="submit" data-test="registry-save">Salvar {tipo}</button>
+        <button type="submit" data-test="registry-save">Salvar {type}</button>
       </form>
     </TransactionsContainer>
   )

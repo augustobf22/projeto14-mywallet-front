@@ -10,14 +10,14 @@ export default function App() {
   return (
     <PagesContainer>
       <BrowserRouter>
-      <UserProvider>
-        <Routes>
-          <Route path="/" element={<SignInPage />} />
-          <Route path="/cadastro" element={<SignUpPage />} />
-          <Route path="/home" element={<HomePage />} />
-          <Route path="/nova-transacao/:tipo" element={<TransactionsPage />} />
-        </Routes>
-      </UserProvider>
+        <UserProvider>
+          <Routes>
+            <Route path="/" element={<SignInPage />} />
+            <Route path="/cadastro" element={<SignUpPage />} />
+            <Route path="/home" element={<HomePage />} />
+            <Route path="/nova-transacao/:tipo" element={<TransactionsPage />} />
+          </Routes>
+        </UserProvider>
       </BrowserRouter>
     </PagesContainer>
   )

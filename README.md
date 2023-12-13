@@ -2,7 +2,7 @@
 Aplicação de back-end para o projeto MyWallet. Nesta aplicação, é possível usar um pequeno site de administração de transações, como se fosse uma certeira digital, sendo possível adicionar e excluir transações.
 
 ## Demo:
-Deploy: 
+Deploy: https://projeto14-mywallet-front-augustobf22.vercel.app/
 
 ## Como funciona?
 Este é o front-end de um projeto full stack em que eu fiz o back-end também. A principal funcionalidade é poder adicionar entradas e saídas (transações) e visualizar o saldo. Para usar a aplicação, é necessário se cadastrar e fazer o login.

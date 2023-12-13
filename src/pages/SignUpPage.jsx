@@ -21,7 +21,7 @@ export default function SignUpPage() {
   function submitForm(event) {
     event.preventDefault();
 
-    if(signUp.password!==confirmPass) {
+    if (signUp.password !== confirmPass) {
       alert("As senhas não estão iguais!");
       return;
     };
@@ -52,11 +52,11 @@ export default function SignUpPage() {
             password: signUp.password
           })}
         />
-        <input 
+        <input
           data-test="email"
-          required 
-          placeholder="E-mail" 
-          type="email" 
+          required
+          placeholder="E-mail"
+          type="email"
           value={signUp.email}
           onChange={e => setSignUp({
             name: signUp.name,
@@ -64,23 +64,23 @@ export default function SignUpPage() {
             password: signUp.password
           })}
         />
-        <input 
+        <input
           data-test="password"
-          required 
-          placeholder="Senha" 
-          type="password" 
+          required
+          placeholder="Senha"
+          type="password"
           value={signUp.password}
           onChange={e => setSignUp({
-            name:signUp.name,
+            name: signUp.name,
             email: signUp.email,
             password: e.target.value
           })}
         />
-        <input 
+        <input
           data-test="conf-password"
-          required 
-          placeholder="Confirme a senha" 
-          type="password" 
+          required
+          placeholder="Confirme a senha"
+          type="password"
           value={confirmPass}
           onChange={e => setConfirm(e.target.value)}
         />
